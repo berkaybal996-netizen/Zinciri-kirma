@@ -26,9 +26,7 @@ import {
 
 import { Input } from "@/components/ui/input"
 
-/* -------------------- */
-/*  AY & YIL LİSTELERİ  */
-/* -------------------- */
+ 
 
 
 const months = [
@@ -50,9 +48,7 @@ const years = Array.from({ length: 5 }, (_, i) =>
     String(new Date().getFullYear() + i)
 )
 
-/* -------------------- */
-/*      ZOD SCHEMA     */
-/* -------------------- */
+ 
 
 const formSchema = z.object({
     username: z.string().min(2, {
@@ -69,37 +65,36 @@ const formSchema = z.object({
     }),
 })
 
-/* -------------------- */
-/*      COMPONENT      */
-/* -------------------- */
+ 
 type Goal = {
-  _id: string
-  username: string
-  goal: string
-  month: string
-  year: string
+    userId: { type: String, required: true },
+    _id: string
+    username: string
+    goal: string
+    month: string
+    year: string
 }
 const GoalPage = () => {
-    
 
-  const [goals, setGoals] = useState<Goal[]>([])
 
-const fetchGoals = async () => {
-  const res = await fetch("/api/goal")
+    const [goals, setGoals] = useState<Goal[]>([])
 
-  if (!res.ok) {
-    throw new Error("Goal listesi alınamadı")
-  }
+    const fetchGoals = async () => {
+        const res = await fetch("/api/goal")
 
-  const data = await res.json()
-  setGoals(data.goals)
-}
+        if (!res.ok) {
+            throw new Error("Goal listesi alınamadı")
+        }
 
-  useEffect(() => {
-    fetchGoals()
-  }, [])
+        const data = await res.json()
+        setGoals(data.goals)
+    }
 
-    
+    useEffect(() => {
+        fetchGoals()
+    }, [])
+
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -110,26 +105,26 @@ const fetchGoals = async () => {
         },
     })
 
-const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  const res = await fetch("/api/goal", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(values),
-  })
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        const res = await fetch("/api/goal", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+        })
 
-  console.log("STATUS:", res.status)
+        console.log("STATUS:", res.status)
 
-  const text = await res.text()
-  console.log("RESPONSE BODY:", text)
+        const text = await res.text()
+        console.log("RESPONSE BODY:", text)
 
-  if (!res.ok) {
-    throw new Error("Goal eklenemedi")
-  }
+        if (!res.ok) {
+            throw new Error("Goal eklenemedi")
+        }
 
-  await fetchGoals()
-}
+        await fetchGoals()
+    }
 
 
 
@@ -221,7 +216,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
                     />
 
                     <Button type="submit" className="w-full">
-                        Kaydet
+                        Hedef Ekle
                     </Button>
 
                 </form>

@@ -1,15 +1,15 @@
-import { connectDB } from "@/lib/db"
-import Goal from "@/app/models/Goal" // 🔥 default import
+import { connectDB } from "@/lib/db" // Veritabanı bağlantı fonksiyonunu içe aktar
+import Goal from "@/app/models/Goal" // Model dosyasını içe aktar
 export async function GET() {
     try {
         await connectDB()
         const goals = await Goal.find().sort({ createdAt: -1 })
 
-        return new Response(JSON.stringify({ goals }), {
+        return new Response(JSON.stringify({ goals }), { // json formatına döndür
             status: 200,
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json" }, // içerik türü 
         })
-    } catch (error) {
+    } catch (error) { 
         console.error("GET ERROR:", error)
         return new Response(
             JSON.stringify({ error: "Goals alınamadı" }),
